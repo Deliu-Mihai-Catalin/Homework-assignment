@@ -1,52 +1,84 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+#define MAX_PAGES 1000  // Maximum number of pages in a book
+
 // Function to check if it's possible to allocate books such that
 // no employee gets more than max_load pages
-int isFeasible(int books[], int n, int k, int max_load) {
+int isPossible(int books[], int n, int k, int max_load) {
     int num_employees = 1, current_load = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) 
+    {
         if (books[i] > max_load) return 0;
 
-        if (current_load + books[i] > max_load) {
+        if (current_load + books[i] > max_load) 
+        {
             num_employees++;
             current_load = books[i];
 
             if (num_employees > k) return 0;
-        } else {
+        } 
+        else 
+        {
             current_load += books[i];
         }
     }
     return 1;
 }
+
 // Function to find the minimum possible maximum load
 int findMinMaxLoad(int books[], int n, int k) {
     int sum = 0;
     for (int i = 0; i < n; i++) sum += books[i];
+
     int left = 0, right = sum, result = sum;
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        if (isFeasible(books, n, k, mid)) {
+        if (isPossible(books, n, k, mid)) 
+        {
             result = mid;
             right = mid - 1;
-        } else {
+        }
+        else 
+        {
             left = mid + 1;
         }
     }
     return result;
 }
+
 int main() 
 {
     int n, k;
+
+    // Initialize random number generator
+    srand(time(NULL));
+
+    // Read the number of books
+    printf("Enter the number of books: ");
     scanf("%d", &n);
-    int books[100];
+
+    int books[n];
+
+    // Generate random pages for each book
+    printf("Generating random pages for each book...\n");
     for (int i = 0; i < n; i++) 
     {
-        scanf("%d", &books[i]);
+        books[i] = rand() % MAX_PAGES + 1;  // Random pages between 1 and MAX_PAGES
+        printf("Book %d: %d pages\n", i + 1, books[i]);
     }
+
+    // Read the number of employees
+    printf("Enter the number of employees: ");
     scanf("%d", &k);
+
+    // Find and print the minimum possible maximum load
     int minMaxLoad = findMinMaxLoad(books, n, k);
-    printf("%d\n", minMaxLoad);
+    printf("The minimum possible maximum load is %d\n", minMaxLoad);
+
     return 0;
 }
 

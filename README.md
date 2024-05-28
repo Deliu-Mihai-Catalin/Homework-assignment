@@ -9,3 +9,4 @@ findMinMaxLoad Function:
 
 Random Data Generation:
 -The program generates random page numbers for each book within a specified range using the "rand()" function and seeds the random number generator with the current time to ensure different sequences of random numbers each time the program runs.
+  
